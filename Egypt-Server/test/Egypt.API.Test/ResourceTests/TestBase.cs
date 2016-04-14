@@ -1,45 +1,21 @@
-﻿using System.IO;
+﻿using System;
 using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Hosting;
+using System.Net.Http.Headers;
+using Autofac;
 using Egypt.API.Resources;
-using Egypt.Domain;
 using Newtonsoft.Json;
-using NHibernate;
-using NHibernate.Cfg;
 
 namespace Egypt.API.Test.ResourceTests
 {
-    public class TestBase
+    public class TestBase: IDisposable
     {
-        private readonly ISessionFactory _sessionFactory;
+        private readonly SelfHostServer server;
+        protected ILifetimeScope Scope { get; private set; }
 
         protected TestBase()
         {
-            var configuration =
-                new Configuration()
-                    .SetDefaultAssembly(typeof(User).Assembly.FullName)
-                    .SetDefaultNamespace(typeof(User).Namespace)
-                    .AddDirectory(new DirectoryInfo("./"));
-
-            _sessionFactory = configuration.BuildSessionFactory();
-        }
-
-        protected ISession GetSession()
-        {
-            return _sessionFactory.OpenSession();
-        }
-
-        protected UserController ResolveController()
-        {
-            var httpConfiguration = new HttpConfiguration();
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost/api/user");
-            var controller = new UserController(GetSession())
-            {
-                Request = request
-            };
-            controller.Request.Properties[HttpPropertyKeys.HttpConfigurationKey] = httpConfiguration;
-            return controller;
+            server = new SelfHostServer(21000);
+            Scope = server.RootContainer.BeginLifetimeScope();
         }
 
         protected static T Body<T>(HttpResponseMessage response)
@@ -47,6 +23,23 @@ namespace Egypt.API.Test.ResourceTests
             var result = response.Content.ReadAsStringAsync().Result;
             var userResult = JsonConvert.DeserializeObject<T>(result);
             return userResult;
+        }
+
+        protected HttpResponseMessage Post(string uri, UserRegisterRequest request)
+        {
+            var httpRequest = new HttpRequestMessage
+            {
+                Content = new StringContent(JsonConvert.SerializeObject(request)),
+                Method = HttpMethod.Post,
+                RequestUri = new Uri( server.BaseAddress + uri)
+            };
+            httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            return new HttpClient().SendAsync(httpRequest).Result;
+        }
+
+        public void Dispose()
+        {
+            server.Close();
         }
     }
 }

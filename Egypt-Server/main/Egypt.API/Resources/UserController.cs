@@ -15,6 +15,7 @@ namespace Egypt.API.Resources
             this.session = session;
         }
 
+        [HttpPost]
         public HttpResponseMessage Register(UserRegisterRequest request)
         {
             var user = new User
