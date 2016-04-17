@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Egypt.API.Test.Common
 {
-    public class TestBase: IDisposable
+    public class TestBase : IDisposable
     {
         private readonly SelfHostServer _server;
         protected ILifetimeScope Scope { get; private set; }
@@ -31,7 +31,7 @@ namespace Egypt.API.Test.Common
             {
                 Content = new StringContent(JsonConvert.SerializeObject(request)),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri( _server.BaseAddress + uri)
+                RequestUri = new Uri(_server.BaseAddress + uri)
             };
             httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return new HttpClient().SendAsync(httpRequest).Result;

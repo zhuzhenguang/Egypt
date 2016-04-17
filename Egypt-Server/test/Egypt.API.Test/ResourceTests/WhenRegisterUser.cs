@@ -11,27 +11,22 @@ namespace Egypt.API.Test.ResourceTests
     public class WhenRegisterUser : TestBase
     {
         [Fact]
-        public void should_register_user()
+        public void should_return_link_when_register_with_correct_input()
         {
-            var request = new UserRegisterRequest
-            {
-                Name = "zhu",
-                Email = "zhu@qq.com",
-                Password = "zhuzhu",
-                Gender = Gender.Male
-            };
-
+            var request = new UserRegisterRequest("zhu", "zhu@qq.com", "zhuzhu", Gender.Male);
             var response = Post("user", request);
-
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
-            var userResult = Body<UserRegisterResult>(response);
-            Assert.Equal(1, userResult.Links.Count);
-            Assert.Equal("user/detail", userResult.Links[0].Rel);
-            Assert.Equal("users/1", userResult.Links[0].Uri);
+            var links = Body<UserRegisterResult>(response).Links;
+            Assert.Equal(1, links.Count);
+            Assert.Equal("user/detail", links[0].Rel);
+            Assert.Equal("users/1", links[0].Uri);
 
-            var userId = userResult.Links[0].ExtractId();
-            var user = Scope.Resolve<ISession>().Get<User>(userId);
+            //resolve component of register in container;
+            var session = Scope.Resolve<ISession>();
+
+            var userId = links[0].ExtractId();
+            var user = session.Get<User>(userId);  
             Assert.Equal("zhu", user.Name);
             Assert.Equal("zhu@qq.com", user.Email);
             Assert.Equal("zhuzhu", user.Password);
@@ -39,10 +34,26 @@ namespace Egypt.API.Test.ResourceTests
         }
 
         [Fact]
-        public void should_resolve_controller()
+        public void should_return_bad_request_when_register_with_any_empty_input()
         {
-            var controller = Scope.Resolve<UserController>();
-            Assert.NotNull(controller);
+            var emptyNameResponse = Post("user", new UserRegisterRequest("", "zhu@qq.com", "zhuzhu", Gender.Male));
+            Assert.Equal(HttpStatusCode.BadRequest, emptyNameResponse.StatusCode);
+
+            var emptyEmailResponse = Post("user", new UserRegisterRequest("zhu", "", "zhuzhu", Gender.Male));
+            Assert.Equal(HttpStatusCode.BadRequest, emptyEmailResponse.StatusCode);
+
+            var emptyPasswordResponse = Post("user", new UserRegisterRequest("zhu", "zhu@qq.com", "", Gender.Male));
+            Assert.Equal(HttpStatusCode.BadRequest, emptyPasswordResponse.StatusCode);
+        }
+
+        [Fact]
+        public void should_return_bad_request_when_register_with_an_existing_email()
+        {
+            var firstUserRegisterResponse = Post("user", new UserRegisterRequest("zhu", "zhu@qq.com", "zhuzhu", Gender.Male));
+            Assert.Equal(HttpStatusCode.OK, firstUserRegisterResponse.StatusCode);
+
+            var secondUserRegisterResponse = Post("user", new UserRegisterRequest("zhu1", "zhu@qq.com", "zhuzhu1", Gender.Female));
+            Assert.Equal(HttpStatusCode.BadRequest, secondUserRegisterResponse.StatusCode);
         }
     }
 }

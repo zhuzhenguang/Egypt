@@ -16,8 +16,7 @@ namespace Egypt.API.Modules
 
         private static ISessionFactory BuildSessionFactory(IComponentContext componentContext)
         {
-            var configuration =
-                new Configuration()
+            var configuration = new Configuration()
                     .SetDefaultAssembly(typeof (User).Assembly.FullName)
                     .SetDefaultNamespace(typeof (User).Namespace)
                     .AddDirectory(new DirectoryInfo("./"));

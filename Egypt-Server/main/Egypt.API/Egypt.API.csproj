@@ -61,6 +61,9 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Content Include="Global.asax" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Exception\BadRequestException.cs" />
+    <Compile Include="Exception\BadRequestResponseFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

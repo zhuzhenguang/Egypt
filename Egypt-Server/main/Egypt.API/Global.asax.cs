@@ -4,6 +4,7 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Egypt.API.Modules;
+using Egypt.API.Resources;
 
 namespace Egypt.API
 {
@@ -19,6 +20,7 @@ namespace Egypt.API
 
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
             RouteConfig.Map(config);
+            WebApiConfig.RegisterFilters(config);
             return container;
         }
     }

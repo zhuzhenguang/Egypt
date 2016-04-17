@@ -4,8 +4,8 @@ namespace Egypt.API.Resources
 {
     public class ResourceLink
     {
-        public string Rel { get; set; }
-        public string Uri { get; set; }
+        public string Rel { get; private set; }
+        public string Uri { get; private set; }
 
         public ResourceLink(string rel, string uri)
         {
