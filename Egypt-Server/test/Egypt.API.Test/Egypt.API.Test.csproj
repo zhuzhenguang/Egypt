@@ -74,9 +74,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\SelfHostServer.cs" />
+    <Compile Include="Common\TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourceTests\SelfHostServer.cs" />
-    <Compile Include="ResourceTests\TestBase.cs" />
     <Compile Include="ResourceTests\WhenRegisterUser.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,9 +94,6 @@
       <Project>{69207ad8-2ff8-4276-b829-bcc2bc8cf6e8}</Project>
       <Name>Egypt.Domain</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

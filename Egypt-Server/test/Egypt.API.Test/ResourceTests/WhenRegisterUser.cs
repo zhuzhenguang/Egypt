@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using Autofac;
 using Egypt.API.Resources;
+using Egypt.API.Test.Common;
 using Egypt.Domain;
 using NHibernate;
 using Xunit;

@@ -8,11 +8,11 @@ namespace Egypt.API.Resources
 {
     public class UserController : ApiController
     {
-        private readonly ISession session;
+        private readonly ISession _session;
 
         public UserController(ISession session)
         {
-            this.session = session;
+            _session = session;
         }
 
         [HttpPost]
@@ -26,9 +26,9 @@ namespace Egypt.API.Resources
                 Gender = request.Gender
             };
 
-            using (var tx = session.BeginTransaction())
+            using (var tx = _session.BeginTransaction())
             {
-                session.Save(user);
+                _session.Save(user);
                 tx.Commit();
             }
 
