@@ -3,19 +3,20 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Autofac;
 using Egypt.API.Resources;
+using Egypt.API.Test.ResourceTests;
 using Newtonsoft.Json;
 
 namespace Egypt.API.Test.Common
 {
     public class TestBase : IDisposable
     {
-        private readonly SelfHostServer _server;
+        private readonly SelfHostServer server;
         protected ILifetimeScope Scope { get; private set; }
 
         protected TestBase()
         {
-            _server = new SelfHostServer(21000);
-            Scope = _server.RootContainer.BeginLifetimeScope();
+            server = new SelfHostServer(21000);
+            Scope = server.RootContainer.BeginLifetimeScope();
         }
 
         protected static T Body<T>(HttpResponseMessage response)
@@ -31,15 +32,20 @@ namespace Egypt.API.Test.Common
             {
                 Content = new StringContent(JsonConvert.SerializeObject(request)),
                 Method = HttpMethod.Post,
-                RequestUri = new Uri(_server.BaseAddress + uri)
+                RequestUri = new Uri(server.BaseAddress + uri)
             };
             httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             return new HttpClient().SendAsync(httpRequest).Result;
         }
 
+        protected static string ErrorMessageFrom(HttpResponseMessage userRegisterResponse)
+        {
+            return Body<ErrorMessage>(userRegisterResponse).Message;
+        }
+
         public void Dispose()
         {
-            _server.Close();
+            server.Close();
         }
     }
 }

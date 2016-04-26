@@ -4,6 +4,10 @@ namespace Egypt.API.Resources
 {
     public class UserRegisterRequest
     {
+        public UserRegisterRequest()
+        {
+        }
+
         public UserRegisterRequest(string name, string email, string password, Gender gender)
         {
             Name = name;
@@ -12,9 +16,18 @@ namespace Egypt.API.Resources
             Gender = gender;
         }
 
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public string Password { get; private set; }
-        public Gender Gender { get; private set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public Gender Gender { get; set; }
+
+        public bool AnyBlank()
+        {
+            return ObjectExtention.AnyBlank(
+                Name,
+                Email,
+                Password,
+                Gender);
+        }
     }
 }

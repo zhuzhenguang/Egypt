@@ -37,7 +37,7 @@ namespace Egypt.API.Resources
 
         private void ValidateRequest(UserRegisterRequest request)
         {
-            if (request.Name == string.Empty || request.Email == string.Empty || request.Password == string.Empty)
+            if (request.AnyBlank())
             {
                 throw new BadRequestException("Should register with correct information");
             }

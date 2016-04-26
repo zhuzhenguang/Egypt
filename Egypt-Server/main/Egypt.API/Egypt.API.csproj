@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Modules\PersistenceModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\ObjectExtention.cs" />
     <Compile Include="Resources\ResourceLink.cs" />
     <Compile Include="Resources\UserController.cs" />
     <Compile Include="Resources\UserRegisterRequest.cs" />

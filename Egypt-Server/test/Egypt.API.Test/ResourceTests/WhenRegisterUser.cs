@@ -33,17 +33,16 @@ namespace Egypt.API.Test.ResourceTests
             Assert.Equal(Gender.Male, user.Gender);
         }
 
-        [Fact]
-        public void should_return_bad_request_when_register_with_any_empty_input()
+        [Theory]
+        [InlineData(null, "zhu@qq.com", "zhuzhu")]
+        [InlineData("zhu", null, "zhuzhu")]
+        [InlineData("zhu", "zhu@qq.com", null)]
+        public void should_return_bad_request_when_register_with_any_empty_input(string name, string email, string password)
         {
-            var emptyNameResponse = Post("user", new UserRegisterRequest("", "zhu@qq.com", "zhuzhu", Gender.Male));
+            var userRegisterRequest = new UserRegisterRequest(name, email, password, Gender.Male);
+            var emptyNameResponse = Post("user", userRegisterRequest);
             Assert.Equal(HttpStatusCode.BadRequest, emptyNameResponse.StatusCode);
-
-            var emptyEmailResponse = Post("user", new UserRegisterRequest("zhu", "", "zhuzhu", Gender.Male));
-            Assert.Equal(HttpStatusCode.BadRequest, emptyEmailResponse.StatusCode);
-
-            var emptyPasswordResponse = Post("user", new UserRegisterRequest("zhu", "zhu@qq.com", "", Gender.Male));
-            Assert.Equal(HttpStatusCode.BadRequest, emptyPasswordResponse.StatusCode);
+            Assert.Equal("Should register with correct information", ErrorMessageFrom(emptyNameResponse));
         }
 
         [Fact]
@@ -54,6 +53,7 @@ namespace Egypt.API.Test.ResourceTests
 
             var secondUserRegisterResponse = Post("user", new UserRegisterRequest("zhu1", "zhu@qq.com", "zhuzhu1", Gender.Female));
             Assert.Equal(HttpStatusCode.BadRequest, secondUserRegisterResponse.StatusCode);
+            Assert.Equal("This email has been used, please change!", ErrorMessageFrom(secondUserRegisterResponse));
         }
     }
 }
