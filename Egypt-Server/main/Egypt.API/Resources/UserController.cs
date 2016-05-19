@@ -50,8 +50,7 @@ namespace Egypt.API.Resources
 
         private bool IsExistedEmail(string email)
         {
-            var existingEmails = _session.Query<User>().Select(u => u.Email).ToList();
-            return existingEmails.Any(e => e.Equals(email));
+            return _session.Query<User>().Any(u => u.Email.Equals(email));
         }
     }
 }
