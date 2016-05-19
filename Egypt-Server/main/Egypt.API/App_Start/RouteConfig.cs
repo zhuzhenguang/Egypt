@@ -16,6 +16,16 @@ namespace Egypt.API
                     action = "Register",
                     method = HttpMethod.Post
                 });
+
+            config.Routes.MapHttpRoute(
+                "user-detail",
+                "users/{id}",
+                new
+                {
+                    controller = "User",
+                    action = "Show",
+                    method = HttpMethod.Get
+                });
         }
     }
 }

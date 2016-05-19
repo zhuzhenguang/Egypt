@@ -9,6 +9,7 @@ namespace Egypt.API
         {
             var filters = config.Filters;
             filters.Add(new BadRequestResponseFilter());
+            filters.Add(new NotFoundResponseFilter());
         }
     }
 }

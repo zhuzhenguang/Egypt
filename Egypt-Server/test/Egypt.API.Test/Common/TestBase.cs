@@ -38,6 +38,16 @@ namespace Egypt.API.Test.Common
             return new HttpClient().SendAsync(httpRequest).Result;
         }
 
+        protected HttpResponseMessage Get(ResourceLink uri)
+        {
+            var httpRequest = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(server.BaseAddress + uri.Uri)
+            };
+            return new HttpClient().SendAsync(httpRequest).Result;
+        }
+
         protected static string ErrorMessageFrom(HttpResponseMessage userRegisterResponse)
         {
             return Body<ErrorMessage>(userRegisterResponse).Message;
