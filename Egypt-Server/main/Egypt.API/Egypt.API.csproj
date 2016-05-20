@@ -74,6 +74,7 @@
     <Compile Include="Resources\ObjectExtention.cs" />
     <Compile Include="Resources\ResourceLink.cs" />
     <Compile Include="Resources\UserController.cs" />
+    <Compile Include="Resources\UserDto.cs" />
     <Compile Include="Resources\UserRegisterRequest.cs" />
     <Compile Include="Resources\UserRegisterResult.cs" />
   </ItemGroup>

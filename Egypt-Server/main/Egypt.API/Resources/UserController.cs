@@ -38,20 +38,14 @@ namespace Egypt.API.Resources
         [HttpGet]
         public HttpResponseMessage Show(long id)
         {
-            User user;
-            using (var tx = session.BeginTransaction())
-            {
-                user = session.Get<User>(id);
-                tx.Commit();
-            }
-
+            var user = session.Get<User>(id);
             if (user == null)
             {
                 throw new NotFoundException("Please input a valid user id");
             }
 
-            var userDto = user.ToDto(user);
-            return Request.CreateResponse(HttpStatusCode.OK, (object)userDto);
+            var userDto = new UserDto(user);
+            return Request.CreateResponse(HttpStatusCode.OK, (object) userDto);
         }
 
         private void ValidateRequest(UserRegisterRequest request)

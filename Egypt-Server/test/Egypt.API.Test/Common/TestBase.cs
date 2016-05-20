@@ -28,24 +28,38 @@ namespace Egypt.API.Test.Common
 
         protected HttpResponseMessage Post(string uri, UserRegisterRequest request)
         {
-            var httpRequest = new HttpRequestMessage
-            {
-                Content = new StringContent(JsonConvert.SerializeObject(request)),
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(server.BaseAddress + uri)
-            };
-            httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            return new HttpClient().SendAsync(httpRequest).Result;
+            return Send(
+                uri,
+                HttpMethod.Post,
+                httpRequest =>
+                {
+                    httpRequest.Content = new StringContent(JsonConvert.SerializeObject(request));
+                    httpRequest.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                });
         }
 
         protected HttpResponseMessage Get(ResourceLink uri)
         {
+            return Get(uri.Uri);
+        }
+        
+        private HttpResponseMessage Send(string uri, HttpMethod method, Action<HttpRequestMessage> action = null)
+        {
             var httpRequest = new HttpRequestMessage
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(server.BaseAddress + uri.Uri)
+                Method = method,
+                RequestUri = new Uri(server.BaseAddress + uri)
             };
+            if (action != null)
+            {
+                action(httpRequest);
+            }
             return new HttpClient().SendAsync(httpRequest).Result;
+        }
+
+        private HttpResponseMessage Get(string uri)
+        {
+            return Send(uri, HttpMethod.Get);
         }
 
         protected static string ErrorMessageFrom(HttpResponseMessage userRegisterResponse)

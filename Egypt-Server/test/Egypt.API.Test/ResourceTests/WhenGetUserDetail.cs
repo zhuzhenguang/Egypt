@@ -19,11 +19,10 @@ namespace Egypt.API.Test.ResourceTests
             var response = Get(links[0]);
 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            var userDto = Body<dynamic>(response);
-            Assert.Equal("zhu", (string)userDto.name);
-            Assert.Equal("zhu@qq.com", (string)userDto.email);
-            Assert.Equal("zhuzhu", (string)userDto.password);
-            Assert.Equal(Gender.Male, (Gender)userDto.gender);
+            var userDto = Body<UserDto>(response);
+            Assert.Equal("zhu", userDto.Name);
+            Assert.Equal("zhu@qq.com", userDto.Email);
+            Assert.Equal(Gender.Male, userDto.Gender);
         }
 
         [Fact]
