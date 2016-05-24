@@ -48,6 +48,15 @@ namespace Egypt.API.Resources
             return Request.CreateResponse(HttpStatusCode.OK, (object) userDto);
         }
 
+        [HttpPost]
+        public HttpResponseMessage Login(UserLoginRequest request)
+        {
+            var user = session.Query<User>()
+                           .FirstOrDefault(u => u.Email == request.Email && u.Password == request.Password);
+
+            return Request.CreateResponse(user == null ? HttpStatusCode.BadRequest : HttpStatusCode.OK);
+        }
+
         private void ValidateRequest(UserRegisterRequest request)
         {
             if (request.AnyBlank())

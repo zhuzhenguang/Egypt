@@ -26,7 +26,7 @@ namespace Egypt.API.Test.Common
             return userResult;
         }
 
-        protected HttpResponseMessage Post(string uri, UserRegisterRequest request)
+        protected HttpResponseMessage Post(string uri, object request)
         {
             return Send(
                 uri,

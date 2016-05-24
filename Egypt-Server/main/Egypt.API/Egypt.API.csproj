@@ -75,6 +75,7 @@
     <Compile Include="Resources\ResourceLink.cs" />
     <Compile Include="Resources\UserController.cs" />
     <Compile Include="Resources\UserDto.cs" />
+    <Compile Include="Resources\UserLoginRequest.cs" />
     <Compile Include="Resources\UserRegisterRequest.cs" />
     <Compile Include="Resources\UserRegisterResult.cs" />
   </ItemGroup>
